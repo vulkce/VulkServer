@@ -14,12 +14,12 @@ const infoFilesPath = path.resolve(__dirname, "info");
 app.use(cors());
 app.use(express.static("public"));
 
-// Função para listar arquivos e diretórios
+// Function to list files and directores
 const getDirectoryStructure = (dirPath) => {
     try {
         const absolutePath = path.resolve(localFilesPath, dirPath);
         if (!absolutePath.startsWith(localFilesPath)) {
-            return null; // Evita path traversal
+            return null;
         }
 
         const items = fs.readdirSync(absolutePath);
@@ -32,7 +32,7 @@ const getDirectoryStructure = (dirPath) => {
     }
 };
 
-// API para obter a estrutura de arquivos e diretórios
+// API to get the files and folders with the path
 app.get("/api/files", (req, res) => {
     const relativePath = req.query.path || "";
     if (relativePath.includes("..")) return res.status(400).json({ error: "Caminho inválido" });
@@ -52,7 +52,7 @@ app.get("/api/files", (req, res) => {
     }
 });
 
-// API para obter informações dos arquivos
+// API to get information from files
 app.get("/api/info/*", (req, res) => {
     const filePath = req.params[0];
     if (filePath.includes("..")) return res.status(400).json({ error: "Caminho inválido" });
@@ -68,7 +68,7 @@ app.get("/api/info/*", (req, res) => {
     }
 });
 
-// Servir os arquivos locais
+// Serving the local 
 app.get("/files/*", (req, res) => {
     const filePath = path.resolve(localFilesPath, req.params[0]);
     if (!filePath.startsWith(localFilesPath)) return res.status(400).json({ error: "Acesso negado" });
@@ -80,11 +80,11 @@ app.get("/files/*", (req, res) => {
     }
 });
 
-// Servir a página inicial
+// Serving the home page
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+    console.log(`server on: http://localhost:${PORT}`);
 });
